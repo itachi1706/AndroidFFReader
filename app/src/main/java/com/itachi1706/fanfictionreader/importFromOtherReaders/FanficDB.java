@@ -5,6 +5,7 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.os.Environment;
+import android.util.Log;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -13,13 +14,13 @@ import java.util.ArrayList;
  * Created by Kenneth on 22/2/2015, 1:50 PM
  * for Fanfiction Reader in package com.itachi1706.fanfictionreader.importFromOtherReaders
  */
-public class FanficDB extends SQLiteOpenHelper {
+public class FanficDB {
 
     //Database Version
     private static final int DATABASE_VERSION = 1;
 
     //Database Name
-    private static final String DATABASE_NAME = "stories";
+    private static final String DATABASE_NAME = "stories.db";
 
     //Tables
     private static final String TABLE_AUTHORS = "authors";
@@ -29,7 +30,7 @@ public class FanficDB extends SQLiteOpenHelper {
     private static final String TABLE_STORIES = "stories";
 
     //Author Keys
-    private static final String KEY_AUTHORS_ID = "authors";
+    private static final String KEY_AUTHORS_ID = "id";
     private static final String KEY_AUTHORS_PAGE_ID = "page_id";
     private static final String KEY_AUTHORS_NAME = "name";
     private static final String KEY_AUTHORS_STORY_SITE = "story_site";
@@ -76,24 +77,16 @@ public class FanficDB extends SQLiteOpenHelper {
     private static final String KEY_STORIES_TYPE = "type";
     private static final String KEY_STORIES_TAG = "tag";
 
-    public FanficDB(Context context){
-        super(context, Environment.getExternalStorageDirectory().getAbsolutePath()
-                + File.separator + DATABASE_NAME, null, DATABASE_VERSION);
-    }
+    private static final String DB_FILE_PATH = Environment.getExternalStorageDirectory().getPath() + "/stories.db";
 
-    @Override
-    public void onCreate(SQLiteDatabase db) {
-        //Ignore
-    }
+    private static SQLiteDatabase db;
 
-    @Override
-    public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-        //Ignore
+    public FanficDB(){
+        File file = new File(DB_FILE_PATH);
+        db = SQLiteDatabase.openOrCreateDatabase(file, null);
     }
-
 
     public ArrayList<OldFFStories> getAllStories(){
-        SQLiteDatabase db = this.getReadableDatabase();
         String queryString = "SELECT * FROM " + TABLE_STORIES + ";";
         Cursor mainCursor = db.rawQuery(queryString, null);
         ArrayList<OldFFStories> result = new ArrayList<>();
@@ -118,11 +111,26 @@ public class FanficDB extends SQLiteOpenHelper {
                     } while (subCursor.moveToNext());
                 }
 
+                subCursor.close();
                 ff.setStoryChapters(chapterList);
                 result.add(ff);
                 chapterList.clear();
             } while (mainCursor.moveToNext());
         }
+        mainCursor.close();
         return result;
+    }
+
+    public String getAuthorName(int authorId){
+        String queryString = "SELECT * FROM " + TABLE_AUTHORS + " WHERE " + KEY_AUTHORS_ID + " = " + authorId + ";";
+        Cursor cursor = db.rawQuery(queryString, null);
+        String authorName = "";
+        if (cursor.moveToFirst()){
+            do{
+                authorName = cursor.getString(2);
+            } while (cursor.moveToNext());
+        }
+        cursor.close();
+        return authorName;
     }
 }

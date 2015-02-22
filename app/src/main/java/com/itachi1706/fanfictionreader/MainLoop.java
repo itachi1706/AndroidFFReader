@@ -29,7 +29,7 @@ public class MainLoop extends ActionBarActivity {
         if (!oldFFDB.exists()){
             new AlertDialog.Builder(this).setTitle("No Databases")
                     .setMessage("Unable to find a database. Please export a 'stories.db' onto the root" +
-                            "of the /sdcard partition")
+                            " of the /sdcard partition")
                     .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
@@ -38,6 +38,7 @@ public class MainLoop extends ActionBarActivity {
                     }).show();
         } else {
             startActivity(new Intent(MainLoop.this, OldFFLibrary.class));
+            finish();
         }
     }
 

@@ -39,13 +39,43 @@ public class OldFFDBAdapter extends ArrayAdapter<OldFFStories> {
         TextView summary = (TextView) v.findViewById(R.id.tvSummary);
         TextView misc = (TextView) v.findViewById(R.id.tvMisc);
         if (title != null){
-
+            title.setText(i.getTitle());
         }
         if (summary != null){
-
+            summary.setText(i.getSummary());
         }
         if (misc != null){
-
+            FanficDB dbHandler = new FanficDB();
+            String authorName = dbHandler.getAuthorName(i.getAuthor_id());
+            String chapters = i.getChapters();
+            String wordCount = i.getWordCount();
+            String language = i.getLanguage();
+            String updateDateString  = i.getUpdatedDate();
+            String rating = i.getRating();
+            String type = i.getType();
+            String category = i.getCategory();
+            String miscs = i.getMisc();
+            String classification = i.getClassification();
+            StringBuilder builder = new StringBuilder();
+            builder.append(authorName).append("\n");
+            builder.append("Chapters: ").append(chapters).append(" Word Count: ").append(wordCount).append("\n");
+            if (type != null)
+                builder.append(type).append(" ");
+            if (language!= null)
+                builder.append(language).append(" ");
+            if (updateDateString != null)
+                builder.append(updateDateString).append(" ");
+            if (category != null)
+                builder.append(category).append(" ");
+            if (rating != null)
+                builder.append(rating).append(" ");
+            if (classification != null)
+                builder.append(classification).append(" ");
+            if (miscs != null)
+                builder.append("\n").append(miscs).append(" ");
+            misc.setText(builder.toString());
         }
+
+        return v;
     }
 }

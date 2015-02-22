@@ -1,11 +1,14 @@
 package com.itachi1706.fanfictionreader.importFromOtherReaders;
 
+import android.app.ProgressDialog;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
+import android.widget.ProgressBar;
 
 import com.itachi1706.fanfictionreader.R;
 
@@ -14,7 +17,6 @@ import java.util.ArrayList;
 public class OldFFLibrary extends ActionBarActivity {
 
     ListView view;
-    private ArrayList<OldFFStories> ffStoriesList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -22,17 +24,35 @@ public class OldFFLibrary extends ActionBarActivity {
         setContentView(R.layout.activity_old_fflibrary);
 
         view = (ListView) findViewById(R.id.lvOldFFDBStories);
-        FanficDB dbHandler = new FanficDB(this.getApplicationContext());
-        ffStoriesList = dbHandler.getAllStories();
-        if (ffStoriesList.size() > 0){
+        final ProgressDialog dialog = new ProgressDialog(this);
+        dialog.setIndeterminate(true);
+        dialog.setTitle("Querying Database");
+        dialog.setMessage("Currently getting stories from database... Please wait...");
 
-        } else {
-            ArrayList<String> nope = new ArrayList<>();
-            nope.add("No Stories Found");
-            ArrayAdapter<String> noStories = new ArrayAdapter<String>(this.getApplicationContext(), android.R.layout.simple_list_item_1, nope);
-            view.setAdapter(noStories);
-        }
-
+        final FanficDB dbHandler = new FanficDB();
+        dialog.show();
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                final ArrayList<OldFFStories> ffStoriesList;
+                ffStoriesList = dbHandler.getAllStories();
+                view.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        dialog.dismiss();
+                        if (ffStoriesList.size() > 0){
+                            OldFFDBAdapter adapter = new OldFFDBAdapter(getApplication().getApplicationContext(), R.layout.listview_old_ff_db, ffStoriesList);
+                            view.setAdapter(adapter);
+                        } else {
+                            ArrayList<String> nope = new ArrayList<>();
+                            nope.add("No Stories Found");
+                            ArrayAdapter<String> noStories = new ArrayAdapter<String>(getApplication().getApplicationContext(), android.R.layout.simple_list_item_1, nope);
+                            view.setAdapter(noStories);
+                        }
+                    }
+                });
+            }
+        }).start();
     }
 
 
