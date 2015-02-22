@@ -99,7 +99,7 @@ public class FanficDB {
                         mainCursor.getString(11), mainCursor.getString(12), mainCursor.getInt(13), mainCursor.getString(14),
                         mainCursor.getString(15), mainCursor.getString(16));
 
-                String subQuery = "SELECT * FROM " + TABLE_CHAPTERS + " WHERE " + KEY_CHAPTERS_STORY_ID + " = " + ff.getId() + ";";
+                String subQuery = "SELECT * FROM " + TABLE_CHAPTERS + " WHERE " + KEY_CHAPTERS_STORY_ID + " = " + ff.getId() + " ORDER BY " + KEY_CHAPTERS_NUMBER + ";";
                 Cursor subCursor = db.rawQuery(subQuery, null);
                 ArrayList<OldFFStoriesChapters> chapterList = new ArrayList<>();
                 if (subCursor.moveToFirst()){

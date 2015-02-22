@@ -21,10 +21,12 @@
         </activity>
         <activity
             android:name=".importFromOtherReaders.OldFFLibrary"
+            android:screenOrientation="portrait"
             android:label="@string/title_activity_old_fflibrary" >
         </activity>
         <activity
             android:name=".importFromOtherReaders.OldFFChapterActivity"
+            android:screenOrientation="portrait"
             android:label="@string/title_activity_old_ffchapter" >
         </activity>
     </application>
