@@ -8,4 +8,5 @@
     <string name="listview_old_ff_db_summary">Summary</string>
     <string name="listview_old_ff_db_random_space" />
     <string name="listview_old_ff_db_misc">Story Information</string>
+    <string name="title_activity_old_ffchapter">OldFFChapterActivity</string>
 </resources>

@@ -9,14 +9,16 @@
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceMedium"
         android:text="@string/listview_old_ff_db_title"
-        android:id="@+id/tvTitle" />
+        android:id="@+id/tvTitle"
+        android:textColor="#fff0ff28" />
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceSmall"
         android:text="@string/listview_old_ff_db_summary"
-        android:id="@+id/tvSummary" />
+        android:id="@+id/tvSummary"
+        android:textColor="#ffffffff" />
 
     <TextView
         android:layout_width="wrap_content"

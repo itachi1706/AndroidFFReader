@@ -1,11 +1,13 @@
 package com.itachi1706.fanfictionreader.importFromOtherReaders;
 
 import android.app.ProgressDialog;
+import android.content.Intent;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.ProgressBar;
@@ -16,14 +18,14 @@ import java.util.ArrayList;
 
 public class OldFFLibrary extends ActionBarActivity {
 
-    ListView view;
+    ListView listview;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_old_fflibrary);
 
-        view = (ListView) findViewById(R.id.lvOldFFDBStories);
+        listview = (ListView) findViewById(R.id.lvOldFFDBStories);
         final ProgressDialog dialog = new ProgressDialog(this);
         dialog.setIndeterminate(true);
         dialog.setTitle("Querying Database");
@@ -36,23 +38,38 @@ public class OldFFLibrary extends ActionBarActivity {
             public void run() {
                 final ArrayList<OldFFStories> ffStoriesList;
                 ffStoriesList = dbHandler.getAllStories();
-                view.post(new Runnable() {
+                listview.post(new Runnable() {
                     @Override
                     public void run() {
                         dialog.dismiss();
                         if (ffStoriesList.size() > 0){
                             OldFFDBAdapter adapter = new OldFFDBAdapter(getApplication().getApplicationContext(), R.layout.listview_old_ff_db, ffStoriesList);
-                            view.setAdapter(adapter);
+                            listview.setAdapter(adapter);
                         } else {
                             ArrayList<String> nope = new ArrayList<>();
                             nope.add("No Stories Found");
                             ArrayAdapter<String> noStories = new ArrayAdapter<String>(getApplication().getApplicationContext(), android.R.layout.simple_list_item_1, nope);
-                            view.setAdapter(noStories);
+                            listview.setAdapter(noStories);
                         }
                     }
                 });
             }
         }).start();
+
+
+        //Get on click
+        listview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                OldFFStories f = (OldFFStories) listview.getItemAtPosition(position);
+                OldFFStaticVars.OldFFcurrentStory = f;
+                Intent intent = new Intent(OldFFLibrary.this, OldFFChapterActivity.class);
+                intent.putExtra("STORY-ID", f.getId());
+                intent.putExtra("CURRENT-CHAPTER", 0);
+                intent.putExtra("STORY-SIZE", f.getStoryChapters().size());
+                startActivity(intent);
+            }
+        });
     }
 
 

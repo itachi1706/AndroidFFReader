@@ -35,7 +35,7 @@ public class MainLoop extends ActionBarActivity {
                         public void onClick(DialogInterface dialog, int which) {
                             finish();
                         }
-                    }).show();
+                    }).setCancelable(false).show();
         } else {
             startActivity(new Intent(MainLoop.this, OldFFLibrary.class));
             finish();
