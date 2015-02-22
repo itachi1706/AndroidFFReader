@@ -102,6 +102,7 @@ public class FanficDB {
                 String subQuery = "SELECT * FROM " + TABLE_CHAPTERS + " WHERE " + KEY_CHAPTERS_STORY_ID + " = " + ff.getId() + " ORDER BY " + KEY_CHAPTERS_NUMBER + ";";
                 Cursor subCursor = db.rawQuery(subQuery, null);
                 ArrayList<OldFFStoriesChapters> chapterList = new ArrayList<>();
+                chapterList.clear();
                 if (subCursor.moveToFirst()){
                     do{
                         OldFFStoriesChapters ffC = new OldFFStoriesChapters(subCursor.getInt(0), subCursor.getString(1),
@@ -114,7 +115,6 @@ public class FanficDB {
                 subCursor.close();
                 ff.setStoryChapters(chapterList);
                 result.add(ff);
-                chapterList.clear();
             } while (mainCursor.moveToNext());
         }
         mainCursor.close();
