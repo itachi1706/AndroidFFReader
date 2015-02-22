@@ -1,0 +1,11 @@
+<resources>
+    <string name="app_name">Fanfiction Reader</string>
+
+    <string name="hello_world">Hello world!</string>
+    <string name="action_settings">Settings</string>
+    <string name="title_activity_old_fflibrary">OldFFLibrary</string>
+    <string name="listview_old_ff_db_title">Title</string>
+    <string name="listview_old_ff_db_summary">Summary</string>
+    <string name="listview_old_ff_db_random_space" />
+    <string name="listview_old_ff_db_misc">Story Information</string>
+</resources>
