@@ -26,13 +26,13 @@ public class OldFFChapterActivity extends ActionBarActivity {
         setContentView(R.layout.activity_old_ffchapter);
         chapter = (TextView) findViewById(R.id.tv_old_ff_chapter);
         if (!(getIntent().hasExtra("STORY-ID") && getIntent().hasExtra("CURRENT-CHAPTER") && getIntent().hasExtra("STORY-SIZE"))){
-            errorOccuredDialog();
+            errorOccuredDialog(null);
         } else {
             String currentStoryID = getIntent().getStringExtra("STORY-ID");
             int currentChapterNum = getIntent().getIntExtra("CURRENT-CHAPTER", 0);
             int storySize = getIntent().getIntExtra("STORY-SIZE", 0);
             if (storySize == 0){
-                errorOccuredDialog();
+                errorOccuredDialog("Not correct size");
             } else {
                 OldFFStoriesChapters c = OldFFStaticVars.OldFFcurrentStory.getStoryChapters().get(currentChapterNum);
                 if (c.getContent().length() > 0){
@@ -41,7 +41,7 @@ public class OldFFChapterActivity extends ActionBarActivity {
                     String path = c.getPath();
                     File file = new File(path);
                     if (!file.exists()){
-                        errorOccuredDialog();
+                        errorOccuredDialog(path);
                     } else {
                         try {
                             BufferedReader reader = new BufferedReader(new FileReader(file));
@@ -61,15 +61,26 @@ public class OldFFChapterActivity extends ActionBarActivity {
         }
     }
 
-    private void errorOccuredDialog(){
-        new AlertDialog.Builder(this).setTitle("An error occured")
-                .setMessage("Unable to find story chapters. Please try again")
-                .setCancelable(false).setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                finish();
-            }
-        }).show();
+    private void errorOccuredDialog(String msg){
+        if (msg == null) {
+            new AlertDialog.Builder(this).setTitle("An error occured")
+                    .setMessage("Unable to find story chapters. Please try again")
+                    .setCancelable(false).setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    finish();
+                }
+            }).show();
+        } else {
+            new AlertDialog.Builder(this).setTitle("An error occured")
+                    .setMessage("Unable to find story chapters (" + msg + "). Please try again")
+                    .setCancelable(false).setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    finish();
+                }
+            }).show();
+        }
     }
 
 
