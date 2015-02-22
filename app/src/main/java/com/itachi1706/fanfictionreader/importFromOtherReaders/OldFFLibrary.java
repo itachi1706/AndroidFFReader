@@ -29,6 +29,7 @@ public class OldFFLibrary extends ActionBarActivity {
         final ProgressDialog dialog = new ProgressDialog(this);
         dialog.setIndeterminate(true);
         dialog.setTitle("Querying Database");
+        dialog.setCancelable(false);
         dialog.setMessage("Currently getting stories from database... Please wait...");
 
         final FanficDB dbHandler = new FanficDB();
